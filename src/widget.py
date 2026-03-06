@@ -10,7 +10,6 @@ def mask_account_card(info: str) -> str:
     number = parts[-1]
     name = " ".join(parts[:-1])
 
-
     if name.lower() == "счет":
         masked_number = get_mask_account(number)
     else:
@@ -23,6 +22,7 @@ if __name__ == "__main__":
     print(mask_account_card("Visa Platinum 7000792289606361"))
     print(mask_account_card("Maestro 7000792289606361"))
     print(mask_account_card("Счет 73654108430135874305"))
+
 
 def get_date(date_str: str) -> str:
     """Принимает строку с датой в формате "2024-03-11Т02:26:18.671407"
