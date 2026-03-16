@@ -23,7 +23,7 @@ if __name__ == "__main__":
 print(filter_by_state(list_dicts))
 
 
-def sort_by_date(list_dict: List[Dict], reverse: boll = True) -> List[Dict]:
+def sort_by_date(list_dict: List[Dict], reverse: bool = True) -> List[Dict]:
     """Функция, которая принимает список словарей и необязательный параметр, задающий порядок сортировки
     (по умолчанию — убывание) и возвращает новый список, отсортированный по дате"""
     sorted_list = sorted(list_dict, key=lambda x: x["date"], reverse=reverse)
