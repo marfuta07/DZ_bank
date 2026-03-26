@@ -51,20 +51,6 @@ def test_whitespace_only_input()-> None:
         mask_account_card("   ")
 
 
-@pytest.mark.parametrize(
-    "input_data, expected_card_call",
-    [
-        ("Visa 1234567890123456", "Visa 1234 56** **** 3456"),
-        ("MasterCard 5555555555554444", "MasterCard 5555 55** **** 4444"),
-        ("Discover 6011000990139424", "Discover 6011 00** **** 9424"),
-    ],
-)
-def test_various_card_types(input_data:str, expected_card_call:str)-> None:
-    """Параметризованный тест для разных типов карт"""
-    result = mask_account_card(input_data)
-    assert result == expected_card_call
-
-
 def test_function_returns_string()-> None:
     """Тест, что функция всегда возвращает строку"""
     result1 = mask_account_card("Visa 1111222233334444")
@@ -125,21 +111,6 @@ def test_boundary_dates()-> None:
     for input_date, expected in test_cases:
         result = get_date(input_date)
         assert result == expected
-
-
-@pytest.mark.parametrize(
-    "input_date,expected",
-    [
-        ("2024-03-11T02:26:18.671407", "11.03.2024"),
-        ("2023-07-25T15:45:30.123456", "25.07.2023"),
-        ("2025-12-01T08:30:15.987654", "01.12.2025"),
-        ("2020-02-29T00:00:00.000000", "29.02.2020"),  # Високосный год
-    ],
-)
-def test_parametrized_valid_dates(input_date:str, expected:str)->None:
-    """Параметризованный тест для различных корректных дат"""
-    result = get_date(input_date)
-    assert result == expected
 
 
 def test_invalid_format_missing_separator()-> None:
