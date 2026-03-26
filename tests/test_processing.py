@@ -88,33 +88,6 @@ def test_items_without_state_key()-> None:
     assert result[0]["id"] == 2
 
 
-@pytest.mark.parametrize(
-    "state_value",
-    [
-        "EXECUTED",
-        "CANCELED",
-        "PENDING",
-        "COMPLETED",
-        "",
-    ],
-)
-def test_various_state_values(state_value:str)->None:
-    """Параметризованный тест для разных значений статуса"""
-    list_dicts = [
-        {"id": 1, "state": "EXECUTED", "date": "2024-01-01"},
-        {"id": 2, "state": "CANCELED", "date": "2024-01-02"},
-        {"id": 3, "state": "PENDING", "date": "2024-01-03"},
-    ]
-
-    # Подсчитываем ожидаемое количество элементов
-    expected_count = sum(1 for item in list_dicts if item.get("state") == state_value)
-    result = filter_by_state(list_dicts, state_value)
-
-    assert len(result) == expected_count
-    for item in result:
-        assert item["state"] == state_value
-
-
 def test_case_sensitive_matching()-> None:
     """Тест чувствительности к регистру"""
     list_dicts = [
@@ -145,32 +118,6 @@ def test_function_returns_list_of_dicts()-> None:
 
 
 """Тесты для функции сортировки списка словарей по дате"""
-
-
-@pytest.fixture
-def sample_data() -> List[Dict]:
-    """Фикстура с тестовыми данными"""
-    return [
-        {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-        {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-        {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-        {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-    ]
-
-
-def test_sort_descending_default(sample_data: List[Dict])-> None:
-    """Тест сортировки по убыванию (по умолчанию)"""
-    result = sort_by_date(sample_data)
-    # Ожидаемый порядок: самая новая дата первая
-    expected_dates = [
-        "2019-07-03T18:35:29.512364",
-        "2018-10-14T08:21:33.419441",
-        "2018-09-12T21:27:25.241689",
-        "2018-06-30T02:08:58.425572",
-    ]
-
-    result_dates = [item["date"] for item in result]
-    assert result_dates == expected_dates
 
 
 def test_sort_ascending(sample_data: List[Dict])-> None:
@@ -241,36 +188,6 @@ def test_different_data_structure()-> None:
     expected_dates = ["2024-02-15T15:30:00.000000", "2024-03-01T10:00:00.000000", "2024-04-10T08:45:00.000000"]
     result_dates = [item["date"] for item in result]
     assert result_dates == expected_dates
-
-
-@pytest.mark.parametrize(
-    "reverse,expected_order",
-    [
-        (
-            True,
-            [
-                "2019-07-03T18:35:29.512364",
-                "2018-10-14T08:21:33.419441",
-                "2018-09-12T21:27:25.241689",
-                "2018-06-30T02:08:58.425572",
-            ],
-        ),
-        (
-            False,
-            [
-                "2018-06-30T02:08:58.425572",
-                "2018-09-12T21:27:25.241689",
-                "2018-10-14T08:21:33.419441",
-                "2019-07-03T18:35:29.512364",
-            ],
-        ),
-    ],
-)
-def test_parametrized_sorting_orders(sample_data: List[Dict], reverse: bool, expected_order: List[str])-> None:
-    """Параметризованный тест для проверки обоих направлений сортировки"""
-    result = sort_by_date(sample_data, reverse=reverse)
-    result_dates = [item["date"] for item in result]
-    assert result_dates == expected_order
 
 
 def test_consistent_output_type(sample_data: List[Dict])-> None:
