@@ -1,5 +1,7 @@
+from typing import Dict, List
+
 import pytest
-from typing import List, Dict
+
 from src.processing import filter_by_state, sort_by_date
 
 """Тесты для функции фильтрации словарей по статусу"""
