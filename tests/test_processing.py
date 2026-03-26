@@ -5,7 +5,7 @@ from src.processing import filter_by_state, sort_by_date
 """Тесты для функции фильтрации словарей по статусу"""
 
 
-def test_default_state_executed():
+def test_default_state_executed()-> None:
     """Тест фильтрации по умолчанию (статус 'EXECUTED')"""
     list_dicts = [
         {"id": 414288290, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -23,7 +23,7 @@ def test_default_state_executed():
         assert item["state"] == "EXECUTED"
 
 
-def test_specific_state_canceled():
+def test_specific_state_canceled()-> None:
     """Тест фильтрации по конкретному статусу ('CANCELED')"""
     list_dicts = [
         {"id": 414288290, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -41,7 +41,7 @@ def test_specific_state_canceled():
         assert item["state"] == "CANCELED"
 
 
-def test_no_matching_items():
+def test_no_matching_items()-> None:
     """Тест когда нет элементов с заданным статусом"""
     list_dicts = [
         {"id": 414288290, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -54,14 +54,14 @@ def test_no_matching_items():
     assert isinstance(result, list)
 
 
-def test_empty_list():
+def test_empty_list()-> None:
     """Тест с пустым списком входных данных"""
     result = filter_by_state([])
     assert len(result) == 0
     assert isinstance(result, list)
 
 
-def test_all_items_match():
+def test_all_items_match()-> None:
     """Тест когда все элементы соответствуют статусу"""
     list_dicts = [
         {"id": 1, "state": "EXECUTED", "date": "2024-01-01T00:00:00"},
@@ -74,7 +74,7 @@ def test_all_items_match():
     assert result == list_dicts
 
 
-def test_items_without_state_key():
+def test_items_without_state_key()-> None:
     """Тест со словарями, не содержащими ключа 'state'"""
     list_dicts = [
         {"id": 1, "date": "2024-01-01T00:00:00"},  # Нет ключа state
@@ -98,7 +98,7 @@ def test_items_without_state_key():
         "",
     ],
 )
-def test_various_state_values(state_value):
+def test_various_state_values(state_value:str)->None:
     """Параметризованный тест для разных значений статуса"""
     list_dicts = [
         {"id": 1, "state": "EXECUTED", "date": "2024-01-01"},
@@ -115,7 +115,7 @@ def test_various_state_values(state_value):
         assert item["state"] == state_value
 
 
-def test_case_sensitive_matching():
+def test_case_sensitive_matching()-> None:
     """Тест чувствительности к регистру"""
     list_dicts = [
         {"id": 1, "state": "EXECUTED", "date": "2024-01-01"},
@@ -131,7 +131,7 @@ def test_case_sensitive_matching():
     assert result_lower[0]["id"] == 2
 
 
-def test_function_returns_list_of_dicts():
+def test_function_returns_list_of_dicts()-> None:
     """Тест что функция всегда возвращает список словарей"""
     list_dicts = [
         {"id": 1, "state": "EXECUTED", "date": "2024-01-01"},
@@ -158,7 +158,7 @@ def sample_data() -> List[Dict]:
     ]
 
 
-def test_sort_descending_default(sample_data: List[Dict]):
+def test_sort_descending_default(sample_data: List[Dict])-> None:
     """Тест сортировки по убыванию (по умолчанию)"""
     result = sort_by_date(sample_data)
     # Ожидаемый порядок: самая новая дата первая
@@ -173,7 +173,7 @@ def test_sort_descending_default(sample_data: List[Dict]):
     assert result_dates == expected_dates
 
 
-def test_sort_ascending(sample_data: List[Dict]):
+def test_sort_ascending(sample_data: List[Dict])-> None:
     """Тест сортировки по возрастанию"""
     result = sort_by_date(sample_data, reverse=False)
 
@@ -189,20 +189,20 @@ def test_sort_ascending(sample_data: List[Dict]):
     assert result_dates == expected_dates
 
 
-def test_list():
+def test_list()-> None:
     """Тест с пустым списком"""
     result = sort_by_date([])
     assert result == []
 
 
-def test_single_item_list(sample_data: List[Dict]):
+def test_single_item_list(sample_data: List[Dict])-> None:
     """Тест со списком из одного элемента"""
     single_item = [sample_data[0]]
     result = sort_by_date(single_item)
     assert result == single_item
 
 
-def test_identical_dates():
+def test_identical_dates()-> None:
     """Тест с одинаковыми датами"""
     data = [
         {"id": 1, "state": "A", "date": "2024-01-01T00:00:00.000000"},
@@ -216,7 +216,7 @@ def test_identical_dates():
     assert result_ids == expected_ids
 
 
-def test_original_list_unchanged(sample_data: List[Dict]):
+def test_original_list_unchanged(sample_data: List[Dict])-> None:
     """Тест, что исходная коллекция не изменяется"""
     original_copy = sample_data.copy()
     sort_by_date(sample_data)
@@ -224,13 +224,13 @@ def test_original_list_unchanged(sample_data: List[Dict]):
     assert sample_data == original_copy
 
 
-def test_returns_new_list(sample_data: List[Dict]):
+def test_returns_new_list(sample_data: List[Dict])-> None:
     """Тест, что функция возвращает новый список, а не модифицирует исходный"""
     result = sort_by_date(sample_data)
     assert result is not sample_data  # Это разные объекты в памяти
 
 
-def test_different_data_structure():
+def test_different_data_structure()-> None:
     """Тест с другим набором полей в словарях"""
     data = [
         {"name": "Alice", "date": "2024-03-01T10:00:00.000000"},
@@ -266,14 +266,14 @@ def test_different_data_structure():
         ),
     ],
 )
-def test_parametrized_sorting_orders(sample_data: List[Dict], reverse: bool, expected_order: List[str]):
+def test_parametrized_sorting_orders(sample_data: List[Dict], reverse: bool, expected_order: List[str])-> None:
     """Параметризованный тест для проверки обоих направлений сортировки"""
     result = sort_by_date(sample_data, reverse=reverse)
     result_dates = [item["date"] for item in result]
     assert result_dates == expected_order
 
 
-def test_consistent_output_type(sample_data: List[Dict]):
+def test_consistent_output_type(sample_data: List[Dict])-> None:
     """Тест, что функция всегда возвращает список словарей"""
     result = sort_by_date(sample_data)
     assert isinstance(result, list)
