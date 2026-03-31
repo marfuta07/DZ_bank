@@ -59,12 +59,6 @@ for _ in range(2):
 def transaction_descriptions(transactions):
     """
     Генератор, который возвращает описания операций из списка транзакций.
-
-    Args:
-        transactions (list): Список словарей, представляющих транзакции.
-
-    Yields:
-        str: Описание операции (значение поля 'description' из транзакции).
     """
     for transaction in transactions:
         # Проверяем наличие поля 'description' в транзакции
@@ -83,16 +77,6 @@ for _ in range(3):
 def card_number_generator(start=1, end=9999999999999999):
     """
     Генератор номеров банковских карт в формате XXXX XXXX XXXX XXXX.
-
-    Args:
-        start (int): Начальное число для генерации (по умолчанию 1).
-        end (int): Конечное число для генерации (по умолчанию 9999999999999999).
-
-    Yields:
-        str: Номер карты в формате 'XXXX XXXX XXXX XXXX'.
-
-    Raises:
-        ValueError: Если start или end выходят за допустимые границы, либо start > end.
     """
     # Проверяем корректность границ
     if not (1 <= start <= 9999999999999999):
