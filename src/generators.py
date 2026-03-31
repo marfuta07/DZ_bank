@@ -3,7 +3,6 @@ def filter_by_currency(transactions, currency_code):
         if transaction['operationAmount']['currency']['code'] == currency_code:
             yield transaction
 
-
 transactions =[
     {
         "id": 939719570,
@@ -52,9 +51,8 @@ transactions =[
     }
 ]
 
-usd_transactions = filter_by_currency(transactions, "USD")
-for _ in range(2):
-    print(next(usd_transactions))
+
+
 
 def transaction_descriptions(transactions):
     """
