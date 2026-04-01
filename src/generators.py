@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Iterator
+from typing import Any, Dict, Iterator, List
 
 
 def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -> Iterator[Dict[str, Any]]:
@@ -41,7 +41,7 @@ for _ in range(2):
     print(next(usd_transactions))
 
 
-def transaction_descriptions(transactions:List[Dict[str, Any]]) -> Iterator[str]:
+def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Iterator[str]:
     """
     Генератор, который возвращает описания операций из списка транзакций.
     """
