@@ -1,7 +1,7 @@
-from typing import Dict, List
+from typing import Dict, List, Any, Iterator
 
 
-def filter_by_currency(transactions: List[Dict], currency_code: str) -> List[Dict]:
+def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -> Iterator[Dict[str, Any]]:
     for transaction in transactions:
         if transaction["operationAmount"]["currency"]["code"] == currency_code:
             yield transaction
@@ -41,7 +41,7 @@ for _ in range(2):
     print(next(usd_transactions))
 
 
-def transaction_descriptions(transactions: List[Dict]) -> List[Dict]:
+def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Iterator[str]:
     """
     Генератор, который возвращает описания операций из списка транзакций.
     """
@@ -60,19 +60,19 @@ for _ in range(3):
     print(next(descriptions))
 
 
-def card_number_generator(start=1, end=9999999999999999) -> str:
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
     """
     Генератор номеров банковских карт в формате XXXX XXXX XXXX XXXX.
     """
     # Проверяем корректность границ
     if not (1 <= start <= 9999999999999999):
         raise ValueError("Начальное значение должно быть в диапазоне от 1 до 9999999999999999")
-    if not (1 <= end <= 9999999999999999):
+    if not (1 <= stop <= 9999999999999999):
         raise ValueError("Конечное значение должно быть в диапазоне от 1 до 9999999999999999")
-    if start > end:
+    if start > stop:
         raise ValueError("Начальное значение не может быть больше конечного")
 
-    for num in range(start, end + 1):
+    for num in range(start, stop + 1):
         # Преобразуем число в строку и дополняем нулями слева до 16 символов
         num_str = str(num).zfill(16)
         # Разбиваем строку на блоки по 4 символа и соединяем пробелами
