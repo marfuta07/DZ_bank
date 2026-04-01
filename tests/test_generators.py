@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import pytest
 
@@ -28,13 +28,6 @@ def test_no_transactions() -> None:
     assert len(result) == 0
 
 
-# Обработка пустого списка:
-def test_empty_transactions() -> None:
-    transactions_ = []
-    result = list(filter_by_currency(transactions_, "USD"))
-    assert len(result) == 0
-
-
 @pytest.mark.parametrize(
     "currency_code, expected_count",
     [
@@ -43,7 +36,7 @@ def test_empty_transactions() -> None:
         ("EUR", 0),
     ],
 )
-def test_filter_by_currency(transactions, currency_code, expected_count):
+def test_filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str, expected_count: int) -> None:
     result = list(filter_by_currency(transactions, currency_code))
     assert len(result) == expected_count
 
@@ -62,20 +55,6 @@ transactions_with_descriptions = [
     {"id": 939719570, "description": "Перевод организации", "amount": 9824.07},
     {"id": 142264268, "description": "Перевод со счета на счет", "amount": 79114.93},
     {"id": 555123456, "description": "Перевод с карты на карту", "amount": 1500.50},
-]
-
-transactions_mixed = [
-    {"id": 1, "description": "Покупка в магазине"},
-    {
-        "id": 2
-        # Нет поля description
-    },
-    {"id": 3, "description": "Оплата услуг"},
-    {
-        "id": 4,
-        "description": "",
-        # Пустое описание
-    },
 ]
 
 
@@ -125,23 +104,6 @@ def test_transactions_without_description_field() -> None:
         assert actual == expected[i], f"Элемент №{i}: ожидалось '{expected[i]}', получено '{actual}'"
 
 
-def test_mixed_transactions() -> None:
-    """Тест: смешанный список транзакций (с description и без)."""
-    descriptions = list(transaction_descriptions(transactions_mixed))
-
-    expected = [
-        "Покупка в магазине",
-        "",  # транзакция без description
-        "Оплата услуг",
-        "",  # транзакция с пустым description
-    ]
-
-    assert len(descriptions) == len(expected), f"Ожидалось {len(expected)} элементов, получено {len(descriptions)}"
-
-    for i, (actual, exp) in enumerate(zip(descriptions, expected)):
-        assert actual == exp, f"Элемент №{i}: ожидалось '{exp}', получено '{actual}'"
-
-
 def test_empty_description_string() -> None:
     """Тест: транзакция с пустым строковым значением description."""
     transactions = [
@@ -182,7 +144,7 @@ def test_empty_description_string() -> None:
         ([], []),  # Пустой список транзакций
     ],
 )
-def test_transaction_descriptions(transactions_, expected_descriptions):
+def test_transaction_descriptions(transactions_: List[Dict[str, Any]], expected_descriptions: str) -> None:
     result = list(transaction_descriptions(transactions_))
     assert result == expected_descriptions
 
@@ -264,3 +226,15 @@ def test_format_consistency() -> None:
         assert len(card) == 19, f"Длина номера некорректна: {len(card)}"
         # Проверяем наличие пробелов на правильных позициях
         assert card[4] == " " and card[9]
+
+
+@pytest.mark.parametrize(
+    "start, stop, expected",
+    [
+        (1, 2, ["0000 0000 0000 0001", "0000 0000 0000 0002"]),
+        (5, 5, ["0000 0000 0000 0005"]),
+    ],
+)
+def test_card_number_generator(start: int, stop: int, expected: List[str]) -> None:
+    result = list(card_number_generator(start, stop))
+    assert result == expected

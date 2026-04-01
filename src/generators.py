@@ -41,7 +41,7 @@ for _ in range(2):
     print(next(usd_transactions))
 
 
-def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Iterator[str]:
+def transaction_descriptions(transactions:List[Dict[str, Any]]) -> Iterator[str]:
     """
     Генератор, который возвращает описания операций из списка транзакций.
     """
