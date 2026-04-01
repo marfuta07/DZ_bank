@@ -50,7 +50,9 @@ transactions =[
         "to": "Карта 5555555555554444"
     }
 ]
-
+usd_transactions = filter_by_currency(transactions, "USD")
+for _ in range(2):
+    print(next(usd_transactions))
 
 
 
