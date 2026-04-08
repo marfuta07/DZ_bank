@@ -1,10 +1,16 @@
+from typing import Callable, Any, Optional
 import functools
 import sys
 
-def log(filename=None):
-    def decorator(func):
+def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    """
+    Декоратор , который  логирует  начало и конец выполнения функции, ее результаты или возникшие ошибки.
+    Должен принимать необязательный аргумент 'filename', который определяет,
+    куда будут записываться логи (в файл или в консоль)
+    """
+    def decorator(func:Callable[..., Any])-> Callable[..., Any]:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             # Определяем, куда выводить логи
             if filename:
                 log_output = open(filename, 'a', encoding='utf-8')
