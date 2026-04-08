@@ -35,3 +35,10 @@ def log(filename=None):
                     log_output.close()
         return wrapper
     return decorator
+
+@log(filename="mylog.txt")
+def my_function(x, y):
+    return x + y
+# Тестируем
+my_function(1, 2)  # Успешное выполнение
+

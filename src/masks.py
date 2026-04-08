@@ -1,3 +1,7 @@
+from src.decorators import log
+
+@log(filename="mylog.txt")
+
 def get_mask_card_number(card_number: str) -> str:
     """Функция маскировки номера банковской карты"""
     result = ""
