@@ -45,6 +45,12 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callab
 @log(filename="mylog.txt")
 def my_function(x, y):
     return x + y
+@log()  # Логирование в консоль
+def faulty_function(a):
+    if a < 0:
+        raise ValueError("Negative value not allowed")
+    return a ** 0.5
+
 # Тестируем
 my_function(1, 2)  # Успешное выполнение
-
+faulty_function(2)
