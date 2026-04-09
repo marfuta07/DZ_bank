@@ -9,3 +9,8 @@ my_function ok
 
 my_function ok
 
+my_function ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok

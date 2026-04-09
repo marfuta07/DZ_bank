@@ -1,6 +1,8 @@
 from typing import Callable, Any, Optional
 import functools
 import sys
+from typing import TextIO
+
 
 def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """
@@ -8,14 +10,13 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callab
     Должен принимать необязательный аргумент 'filename', который определяет,
     куда будут записываться логи (в файл или в консоль)
     """
-    def decorator(func:Callable[..., Any])-> Callable[..., Any]:
+
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+
             # Определяем, куда выводить логи
-            if filename:
-                log_output = open(filename, 'a', encoding='utf-8')
-            else:
-                log_output = sys.stdout
+            log_output: TextIO = open(filename, "a", encoding="utf-8") if filename else sys.stdout
 
             try:
                 # Логируем начало выполнения
@@ -29,9 +30,8 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callab
                 inputs_positional = str(args)
                 inputs_keyword = str(kwargs)
                 print(
-                    f"{func.__name__} error: {error_type}. "
-                    f"Inputs: {inputs_positional}, {inputs_keyword}",
-                    file=log_output
+                    f"{func.__name__} error: {error_type}. " f"Inputs: {inputs_positional}, {inputs_keyword}",
+                    file=log_output,
                 )
                 # Перебрасываем исключение дальше
                 raise
@@ -39,17 +39,23 @@ def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callab
                 # Закрываем файл, если логируем в файл
                 if filename:
                     log_output.close()
+
         return wrapper
+
     return decorator
 
+
 @log(filename="mylog.txt")
-def my_function(x, y):
+def my_function(x:int, y:int)->int:
     return x + y
+
+
 @log()  # Логирование в консоль
-def faulty_function(a):
+def faulty_function(a): #type: ignore
     if a < 0:
         raise ValueError("Negative value not allowed")
-    return a ** 0.5
+    return a**0.5
+
 
 # Тестируем
 my_function(1, 2)  # Успешное выполнение
