@@ -181,5 +181,3 @@ def test_file_permissions_error(tmp_path):
     # Проверяем, что декоратор обрабатывает ошибку доступа к файлу
     with pytest.raises((PermissionError, OSError)):
         test_func()
-
-
