@@ -1,0 +1,7 @@
+my_function ok
+my_function ok
+my_function ok
+my_function ok
+test_func ok
+test_func ok
+test_func ok

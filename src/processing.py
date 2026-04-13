@@ -1,6 +1,8 @@
+from src.decorators import log
 from typing import Dict, List
 
 
+@log(filename="mylog.txt")
 def filter_by_state(list_dicts: List[Dict], state: str = "EXECUTED") -> List[Dict]:
     """Функция которая возвращает список словарей с заданым статусом"""
 
@@ -23,6 +25,7 @@ if __name__ == "__main__":
 #print(filter_by_state(list_dicts))
 
 
+@log(filename="mylog.txt")
 def sort_by_date(list_sort: List[Dict], reverse: bool = True) -> List[Dict]:
     """Функция, которая принимает список словарей и необязательный параметр, задающий порядок сортировки
     (по умолчанию — убывание) и возвращает новый список, отсортированный по дате"""

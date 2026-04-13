@@ -1,3 +1,7 @@
+from src.decorators import log
+
+
+@log(filename="mylog.txt")
 def get_mask_card_number(card_number: str) -> str:
     """Функция маскировки номера банковской карты"""
     result = ""
@@ -12,6 +16,7 @@ def get_mask_card_number(card_number: str) -> str:
 print(get_mask_card_number(card_number="7000792289606361"))
 
 
+@log(filename="mylog.txt")
 def get_mask_account(account_number: str) -> str:
     """Функция маскировки номера банковского счета"""
     if len(account_number) != 20 or not account_number.isdigit():
