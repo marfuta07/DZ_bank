@@ -1,8 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-from typing import Dict, Optional, Union
-
+from typing import Dict, Optional
 
 # Константы для API
 load_dotenv()
@@ -12,14 +11,8 @@ EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/latest"
 
 def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optional[float]:
     """
-    Получает курс валюты через Exchange Rates Data API.
-
-    Параметры:
-        base_currency (str): Исходная валюта (например, 'USD', 'EUR').
-        target_currency (str): Целевая валюта (по умолчанию — 'RUB').
-
-    Возвращает:
-        Текущий курс в виде float или None при ошибке.
+    Функция, которая принимает на вход транзакцию
+    и возвращает сумму транзакции (amount) в рублях, тип данных — float.
     """
     headers = {"apikey": API_KEY}
     params = {"base": base_currency, "symbols": target_currency}
@@ -28,23 +21,21 @@ def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optio
         response = requests.get(EXCHANGE_API_URL, headers=headers, params=params, timeout=5)
         if response.status_code == 200:
             data = response.json()
-            return data["rates"][target_currency]
-    except (requests.RequestException, KeyError, ValueError):
+            return float(data["rates"][target_currency])
+    except requests.RequestException:
+        return None
+    except KeyError:
+        return None
+    except ValueError:
         return None
     return None
 
 
 def convert_currency_to_rub(transaction: Dict) -> float:
     """
-    Возвращает сумму транзакции в рублях.
-
-    Параметры:
-        transaction (dict): Словарь с данными о транзакции. Должен содержать ключи:
-            - 'amount' (число) — сумма операции
-            - 'currency' (str) — валюта ('RUB', 'USD', 'EUR' и т.д.)
-
-    Возвращает:
-        Сумму транзакции в рублях (float). Если валюта не поддерживается или ошибка — возвращается 0.0.
+    Если транзакция была в USD  или EUR,
+    происходит обращение к внешнему API
+    для получения текущего курса валют и конвертации суммы операции в рубли.
     """
     try:
         amount = float(transaction["amount"])
@@ -63,8 +54,13 @@ def convert_currency_to_rub(transaction: Dict) -> float:
         # Если валюта неизвестна или конвертация не удалась
         return 0.0
 
-    except (KeyError, ValueError, TypeError):
+    except KeyError:
         return 0.0
+    except ValueError:
+        return 0.0
+    except TypeError:
+        return 0.0
+
 
 transaction_rub = {"amount": 1000, "currency": "RUB"}
 transaction_usd = {"amount": 50, "currency": "USD"}
