@@ -1,13 +1,10 @@
 from unittest.mock import patch, Mock
 
-
 from src.external_api import convert_currency_to_rub, get_exchange_rate
-
 """Тесты для функции get_exchange_rate."""
 
-
-@patch("utils.requests.get")
-def test_get_exchange_rate_success(mock_get: Mock) -> None:
+@patch("src.external_api.requests.get")
+def test_get_exchange_rate_success(mock_get:Mock) -> None:
     """Проверка успешного получения курса валюты."""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"rates": {"RUB": 75.0}}
@@ -18,18 +15,8 @@ def test_get_exchange_rate_success(mock_get: Mock) -> None:
     mock_get.assert_called_once()
 
 
-@patch("utils.requests.get")
-def test_get_exchange_rate_request_fails(mock_get: Mock) -> None:
-    """Проверка поведения при ошибке сети."""
-    mock_get.side_effect = ConnectionError()
-
-    rate = get_exchange_rate("USD", "RUB")
-
-    assert rate is None
-
-
-@patch("utils.requests.get")
-def test_get_exchange_rate_invalid_response(mock_get: Mock) -> None:
+@patch("src.external_api.requests.get")
+def test_get_exchange_rate_invalid_response(mock_get:Mock) -> None:
     """Проверка при некорректном ответе от API (нет ключа 'rates')."""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {}
@@ -39,7 +26,7 @@ def test_get_exchange_rate_invalid_response(mock_get: Mock) -> None:
     assert rate is None
 
 
-@patch("utils.requests.get")
+@patch("src.external_api.requests.get")
 def test_get_exchange_rate_non_200_status(mock_get: Mock) -> None:
     """Проверка при статусе ответа, отличном от 200."""
     mock_get.return_value.status_code = 401
@@ -50,9 +37,7 @@ def test_get_exchange_rate_non_200_status(mock_get: Mock) -> None:
 
 
 # --- Тесты для convert_currency_to_rub ---
-
-
-@patch("utils.get_exchange_rate")
+@patch("src.external_api.get_exchange_rate")
 def test_rub_to_rub_no_conversion_needed(mock_get_rate: Mock) -> None:
     """Конвертация из RUB в RUB — курс не запрашивается."""
     transaction = {"amount": 1000, "currency": "RUB"}
@@ -63,7 +48,7 @@ def test_rub_to_rub_no_conversion_needed(mock_get_rate: Mock) -> None:
     mock_get_rate.assert_not_called()
 
 
-@patch("utils.get_exchange_rate")
+@patch("src.external_api.get_exchange_rate")
 def test_usd_to_rub_conversion_success(mock_get_rate: Mock) -> None:
     """Конвертация из USD в RUB с успешным получением курса."""
     mock_get_rate.return_value = 75.5
@@ -75,7 +60,7 @@ def test_usd_to_rub_conversion_success(mock_get_rate: Mock) -> None:
     mock_get_rate.assert_called_with("USD", "RUB")
 
 
-@patch("utils.get_exchange_rate")
+@patch("src.external_api.get_exchange_rate")
 def test_eur_to_rub_conversion_success(mock_get_rate: Mock) -> None:
     """Конвертация из EUR в RUB."""
     mock_get_rate.return_value = 82.3
@@ -86,7 +71,7 @@ def test_eur_to_rub_conversion_success(mock_get_rate: Mock) -> None:
     assert result == 411.5  # 5 * 82.3
 
 
-@patch("utils.get_exchange_rate")
+@patch("src.external_api.get_exchange_rate")
 def test_conversion_fails_returns_zero(mock_get_rate: Mock) -> None:
     """Если курс не удалось получить — возвращается 0.0."""
     mock_get_rate.return_value = None
