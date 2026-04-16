@@ -1,10 +1,12 @@
 from unittest.mock import patch, Mock
 
 from src.external_api import convert_currency_to_rub, get_exchange_rate
+
 """Тесты для функции get_exchange_rate."""
 
+
 @patch("src.external_api.requests.get")
-def test_get_exchange_rate_success(mock_get:Mock) -> None:
+def test_get_exchange_rate_success(mock_get: Mock) -> None:
     """Проверка успешного получения курса валюты."""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"rates": {"RUB": 75.0}}
@@ -16,7 +18,7 @@ def test_get_exchange_rate_success(mock_get:Mock) -> None:
 
 
 @patch("src.external_api.requests.get")
-def test_get_exchange_rate_invalid_response(mock_get:Mock) -> None:
+def test_get_exchange_rate_invalid_response(mock_get: Mock) -> None:
     """Проверка при некорректном ответе от API (нет ключа 'rates')."""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {}

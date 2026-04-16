@@ -1,6 +1,6 @@
 import json
 import os
-from typing import List, Dict
+from typing import Dict, List
 
 
 def load_transactions_from_json(file_path: str) -> List[Dict]:

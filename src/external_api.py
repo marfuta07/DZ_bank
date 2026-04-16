@@ -1,7 +1,8 @@
 import os
+from typing import Dict, Optional
+
 import requests
 from dotenv import load_dotenv
-from typing import Dict, Optional
 
 # Константы для API
 load_dotenv()
