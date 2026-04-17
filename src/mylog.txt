@@ -19,3 +19,55 @@ my_function ok
 my_function ok
 filter_by_state ok
 sort_by_date ok
+my_function ok
+my_function ok
+my_function ok
+get_mask_card_number error: NameError. Inputs: (), {'card_number': '7000792289606361'}
+my_function ok
+my_function ok
+my_function ok
+get_mask_card_number error: NameError. Inputs: (), {'card_number': '7000792289606361'}
+my_function ok
+get_mask_card_number error: NameError. Inputs: (), {'card_number': '7000792289606361'}
+my_function ok
+get_mask_card_number error: NameError. Inputs: (), {'card_number': '7000792289606361'}
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok
+my_function ok
+my_function ok
+my_function ok
+get_mask_account ok
+my_function ok
+get_mask_account ok
+my_function ok
+get_mask_account ok
+my_function ok
+get_mask_account ok
+my_function ok
+get_mask_account ok
+my_function ok
+my_function ok
+get_mask_account ok
+my_function ok
+my_function ok
+get_mask_account ok
+my_function ok
+my_function ok
+get_mask_account ok
+my_function ok
+my_function ok
+get_mask_account ok
+my_function ok
+my_function ok
+my_function ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok

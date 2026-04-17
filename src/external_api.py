@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Константы для API
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/latest"
+EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/convert"
 
 
 def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optional[float]:
@@ -39,8 +39,8 @@ def convert_currency_to_rub(transaction: Dict) -> float:
     для получения текущего курса валют и конвертации суммы операции в рубли.
     """
     try:
-        amount = float(transaction["amount"])
-        currency = transaction.get("currency", "RUB").upper()
+        amount = float(transaction["operationAmount"]["amount"])
+        currency = transaction["operationAmount"]["currency"]["code"].upper()
 
         # Если валюта уже RUB — конвертация не нужна
         if currency == "RUB":
@@ -63,9 +63,9 @@ def convert_currency_to_rub(transaction: Dict) -> float:
         return 0.0
 
 
-transaction_rub = {"amount": 1000, "currency": "RUB"}
-transaction_usd = {"amount": 50, "currency": "USD"}
-transaction_eur = {"amount": 30, "currency": "EUR"}
+transaction_rub = {"operationAmount": {"amount": "1000", "currency": {"code": "RUB"}}}
+transaction_usd = {"operationAmount": {"amount": "50", "currency": {"code": "USD"}}}
+transaction_eur = {"operationAmount": {"amount": "30", "currency": {"code": "EUR"}}}
 
 print(convert_currency_to_rub(transaction_rub))  # 1000.0
 print(convert_currency_to_rub(transaction_usd))  # ~3800–4200 (зависит от курса)
