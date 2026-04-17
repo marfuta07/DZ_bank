@@ -18,8 +18,11 @@ def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optio
     headers = {"apikey": API_KEY}
     params = {"base": base_currency, "symbols": target_currency}
 
+    print(f"Запрос к API: base={base_currency}, symbols={target_currency}")
+
     try:
         response = requests.get(EXCHANGE_API_URL, headers=headers, params=params, timeout=5)
+        print(f"Ответ от API: {response.text}")
         if response.status_code == 200:
             data = response.json()
             return float(data["rates"][target_currency])
@@ -30,6 +33,8 @@ def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optio
     except ValueError:
         return None
     return None
+
+
 
 
 def convert_currency_to_rub(transaction: Dict) -> float:
