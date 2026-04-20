@@ -9,32 +9,41 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/convert"
 
+headers = {"apikey": API_KEY}
 
-def get_exchange_rate(base_currency: str, target_currency: str = "RUB") -> Optional[float]:
+
+def get_exchange_rate(amount: float, base_currency: str, target_currency: str = "RUB") -> Optional[float]:
     """
     Функция, которая принимает на вход транзакцию
     и возвращает сумму транзакции (amount) в рублях, тип данных — float.
     """
-    headers = {"apikey": API_KEY}
-    params = {"base": base_currency, "symbols": target_currency}
+    if not API_KEY:
+        print("Ошибка: API_KEY не найден в .env файле.")
+        return None
 
-    print(f"Запрос к API: base={base_currency}, symbols={target_currency}")
-
+    params:dict[str, str|int|float]= {"from": base_currency, "to": target_currency, "amount": amount}
     try:
         response = requests.get(EXCHANGE_API_URL, headers=headers, params=params, timeout=5)
-        print(f"Ответ от API: {response.text}")
-        if response.status_code == 200:
-            data = response.json()
-            return float(data["rates"][target_currency])
-    except requests.RequestException:
-        return None
-    except KeyError:
-        return None
-    except ValueError:
-        return None
-    return None
+        response.raise_for_status()  # Проверка HTTP-статуса
+        data = response.json()
 
+        if "result" in data:
+            return round(float(data["result"]), 2)
+        else:
+            print(f"Поле 'result' отсутствует в ответе: {data}")
+            return None
 
+    except requests.exceptions.HTTPError as e:
+        if response.status_code == 429:
+            print("Ошибка: превышен лимит запросов к API (429 Too Many Requests)")
+        elif response.status_code == 401:
+            print("Ошибка: неверный или отсутствующий API-ключ (401 Unauthorized)")
+        else:
+            print(f"HTTP ошибка: {e}")
+        return None
+    except (requests.RequestException, KeyError, ValueError) as e:
+        print(f"Ошибка сети или обработки ответа: {e}")
+        return None
 
 
 def convert_currency_to_rub(transaction: Dict) -> float:
@@ -53,18 +62,16 @@ def convert_currency_to_rub(transaction: Dict) -> float:
 
         # Поддерживаем конвертацию из USD и EUR
         if currency in ("USD", "EUR"):
-            rate = get_exchange_rate(currency, "RUB")
-            if rate is not None:
-                return round(amount * rate, 2)
+            # Получаем конвертированную сумму напрямую: amount USD → ? RUB
+            converted_amount = get_exchange_rate(amount, currency, "RUB")
+            if converted_amount is not None:
+                return converted_amount
 
-        # Если валюта неизвестна или конвертация не удалась
+        print(f"Валюта {currency} не поддерживается или конвертация не удалась.")
         return 0.0
 
-    except KeyError:
-        return 0.0
-    except ValueError:
-        return 0.0
-    except TypeError:
+    except (KeyError, ValueError, TypeError) as e:
+        print(f"Ошибка при обработке транзакции: {e}")
         return 0.0
 
 
