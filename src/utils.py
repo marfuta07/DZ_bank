@@ -1,15 +1,14 @@
-import logging
-
-logger = logging.getLogger('utils')
-logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler('logs/utils.log', 'w', encoding="utf-8")
-file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s')
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
-
 import json
 import os
 from typing import Dict, List
+import logging
+
+logger = logging.getLogger("utils")
+logger.setLevel(logging.DEBUG)
+file_handler = logging.FileHandler("logs/utils.log", "w", encoding="utf-8")
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
 
 
 def load_transactions_from_json(file_path: str) -> List[Dict]:
@@ -36,8 +35,7 @@ def load_transactions_from_json(file_path: str) -> List[Dict]:
                 return data
             else:
                 logger.warning(
-                    f"Ожидался список транзакций, но получен объект типа {type(data).__name__}. "
-                    f"Файл: {file_path}"
+                    f"Ожидался список транзакций, но получен объект типа {type(data).__name__}. " f"Файл: {file_path}"
                 )
                 return []
     except json.JSONDecodeError as e:
@@ -49,6 +47,7 @@ def load_transactions_from_json(file_path: str) -> List[Dict]:
     except Exception as e:
         logger.error(f"Неожиданная ошибка при загрузке файла {file_path}: {e}")
         return []
+
 
 if __name__ == "__main__":
     print(load_transactions_from_json(os.path.join(os.path.dirname(__file__), "../data/operations.json")))
