@@ -5,8 +5,6 @@ import pandas as pd
 def read_from_csv(file_path:str) -> List[Dict[str, Any]]:
     """
     Считывает финансовые операции из CSV-файла и возвращает список словарей.
-    :param file_path: Путь к CSV-файлу
-    :return: Список словарей с транзакциями
     """
     transactions = []
     try:
@@ -28,8 +26,6 @@ def read_from_excel(file_path:str) -> List[Dict[str, Any]]:
     """
     Считывает финансовые операции из Excel-файла и возвращает список словарей.
 
-    :param file_path: Путь к XLSX-файлу
-    :return: Список словарей с транзакциями
     """
     transactions = []
     try:

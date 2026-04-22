@@ -24,7 +24,7 @@ def get_mask_card_number(card_number: str) -> str:
 
 
 print(get_mask_card_number(card_number="7000792289606391"))
-print(get_mask_card_number(card_number="700079228960639"))
+#print(get_mask_card_number(card_number="700079228960639"))
 
 
 @log(filename="mylog.txt")
@@ -38,4 +38,4 @@ def get_mask_account(account_number: str) -> str:
 
 
 print(get_mask_account(account_number="12304560789015907530"))
-print(get_mask_account(account_number="123045607890159070"))
+#print(get_mask_account(account_number="123045607890159070"))
