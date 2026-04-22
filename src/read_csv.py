@@ -42,5 +42,5 @@ def read_from_excel(file_path:str) -> List[Dict[str, Any]]:
         print(f"Ошибка при чтении Excel: {e}")
     return transactions
 
-data = read_from_excel("transactions_excel.xlsx")
-print(data)
+data_1 = read_from_excel("transactions_excel.xlsx")
+print(data_1)
