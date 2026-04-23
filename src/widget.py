@@ -1,6 +1,8 @@
-from masks import get_mask_account, get_mask_card_number
+from src.decorators import log
+from src.masks import get_mask_account, get_mask_card_number
 
 
+@log(filename="mylog.txt")
 def mask_account_card(info: str) -> str:
     """Маскирует номер карты или счета в зависимости
     от типа входных данных.
@@ -24,6 +26,7 @@ if __name__ == "__main__":
     print(mask_account_card("Счет 73654108430135874305"))
 
 
+@log(filename="mylog.txt")
 def get_date(date_str: str) -> str:
     """Принимает строку с датой в формате "2024-03-11Т02:26:18.671407"
     и возвращает строку в формате "11.03.2024".
