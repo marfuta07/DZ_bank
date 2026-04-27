@@ -1,4 +1,5 @@
 import pytest
+import logging
 from typing import Dict, List
 
 
@@ -62,3 +63,9 @@ def transactions() -> List[Dict]:
             "to": "Счет 14211924144426031657",
         },
     ]
+
+@pytest.fixture(autouse=True)
+def disable_logging():
+    logging.disable(logging.CRITICAL)
+    yield
+    logging.disable(logging.NOTSET)

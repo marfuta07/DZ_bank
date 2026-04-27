@@ -3,6 +3,11 @@ import os
 import json
 import csv
 from src.masks import get_mask_card_number, get_mask_account
+import os
+
+# Определяем тип операции
+Operation = Dict[str, Any]
+
 
 def load_data_from_json(file_path: str) -> List[Dict[str, Any]]:
     """Загружает данные из JSON-файла."""
@@ -32,35 +37,51 @@ def load_data_from_csv(file_path: str) -> List[Dict[str, Any]]:
         return []
 
 
-def load_data_from_xlsx(file_path: str) -> List[Dict[str, Any]]:
-    """Загружает данные из XLSX-файла."""
+def load_data_from_xlsx(file_path: str) -> List[Operation]:
+    """
+    Загружает данные из XLSX-файла и возвращает список словарей.
+    Ключи в словарях — строки (названия столбцов).
+
+    Args:
+        file_path: Путь к XLSX-файлу.
+
+    Returns:
+        Список операций в формате списка словарей с строковыми ключами.
+        При ошибке — пустой список.
+    """
     try:
         import pandas as pd
     except ImportError:
-        print("Установите pandas: pip install pandas")
+        print("Ошибка: не установлен pandas. Установите: pip install pandas")
         return []
 
     if not os.path.exists(file_path):
-        print(f"Файл {file_path} не найден.")
-        return []
-    try:
-        df = pd.read_excel(file_path)
-        return df.to_dict(orient="records")
-    except Exception as e:
-        print(f"Ошибка при чтении XLSX: {e}")
+        print(f"Файл не найден: {file_path}")
         return []
 
+    try:
+        df = pd.read_excel(file_path)
+        # Явно преобразуем ключи в строки, чтобы mypy был доволен
+        records: List[Operation] = []
+        for record in df.to_dict(orient="records"):
+            # Принудительно делаем ключи строками
+            str_record: Operation = {str(k): v for k, v in record.items()}
+            records.append(str_record)
+        return records
+    except Exception as e:
+        print(f"Ошибка при чтении XLSX-файла: {e}")
+        return []
+
+
 # === Фильтрация и обработка ===
+
 
 def process_bank_search(data: List[Dict[str, Any]], search: str) -> List[Dict[str, Any]]:
     """Фильтрует операции по подстроке в 'description' (регистронезависимо)."""
     if not search.strip():
         return data
     query = search.strip().lower()
-    return [
-        op for op in data
-        if 'description' in op and query in op['description'].lower()
-    ]
+    return [op for op in data if "description" in op and query in op["description"].lower()]
 
 
 def filter_by_status(data: List[Dict[str, Any]], status: str) -> Optional[List[Dict[str, Any]]]:
@@ -88,17 +109,17 @@ def sort_operations(data: List[Dict[str, Any]], reverse: bool = True) -> List[Di
 def filter_rub_only(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Только рублёвые операции."""
     return [
-        op for op in data
-        if str(op.get("currency_code", "")).upper() in {"RUB", "RUR"} or
-           str(op.get("operationAmount", {}).get("currency", {}).get("code")) == "RUB"
+        op
+        for op in data
+        if str(op.get("currency_code", "")).upper() in {"RUB", "RUR"}
+        or str(op.get("operationAmount", {}).get("currency", {}).get("code")) == "RUB"
     ]
 
 
 def format_amount(op: Dict[str, Any]) -> str:
     """Форматирует сумму и валюту."""
     amount = op.get("amount") or op.get("operationAmount", {}).get("amount")
-    currency = (op.get("currency_code") or
-                op.get("operationAmount", {}).get("currency", {}).get("code", "Неизвестно"))
+    currency = op.get("currency_code") or op.get("operationAmount", {}).get("currency", {}).get("code", "Неизвестно")
     try:
         return f"{int(float(amount))} {currency}"
     except:
@@ -118,6 +139,7 @@ def print_operations(operations: List[Dict[str, Any]]) -> None:
         date_str = op.get("date", "")
         try:
             from datetime import datetime
+
             date = datetime.fromisoformat(date_str.replace("T", " ").replace("Z", "+00:00"))
             print(date.strftime("%d.%m.%Y"), end=" ")
         except:
@@ -132,14 +154,14 @@ def print_operations(operations: List[Dict[str, Any]]) -> None:
         # Маскировка через функции из masks.py
         if from_field:
             if "Счет" in from_field:
-                acc_num = ''.join(filter(str.isdigit, from_field))
+                acc_num = "".join(filter(str.isdigit, from_field))
                 from_field = get_mask_account(acc_num)
             else:
                 from_field = get_mask_card_number(from_field)
 
         if to_field:
             if "Счет" in to_field:
-                acc_num = ''.join(filter(str.isdigit, to_field))
+                acc_num = "".join(filter(str.isdigit, to_field))
                 to_field = get_mask_account(acc_num)
             else:
                 to_field = get_mask_card_number(to_field)
@@ -154,6 +176,7 @@ def print_operations(operations: List[Dict[str, Any]]) -> None:
 
 
 # === Основная логика ===
+
 
 def main() -> None:
     """Основная функция — связывает все модули и взаимодействует с пользователем."""
