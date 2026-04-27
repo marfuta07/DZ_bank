@@ -217,5 +217,3 @@ __marimo__/
 __pycache__/
 .env
 logs/
-.csv
-.xlsx
