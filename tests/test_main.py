@@ -1,14 +1,13 @@
-from typing import List, Dict, Any, Callable, Optional
+from typing import List, Dict, Any, Callable
 import pytest
-from unittest.mock import patch, MagicMock, Mock
-from types import ModuleType
+from unittest.mock import patch, Mock
 import sys
 import os
+import main
 
 # Добавляем корень проекта в sys.path для импорта main
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import main
 
 # === Типы ===
 

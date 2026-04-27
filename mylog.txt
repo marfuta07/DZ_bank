@@ -1399,3 +1399,12 @@ get_date ok
 get_date ok
 get_date ok
 get_date ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok
+my_function ok
+get_mask_card_number ok
+get_mask_account ok

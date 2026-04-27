@@ -122,10 +122,10 @@ def format_amount(op: Dict[str, Any]) -> str:
 def print_operations(operations: List[Dict[str, Any]]) -> None:
     """Выводит операции с маскировкой через get_mask_card_number и get_mask_account."""
     if not operations:
-        print("❌ Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+        print(" Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
         return
 
-    print(f"\n📊 Всего банковских операций в выборке: {len(operations)}\n")
+    print(f"\n Всего банковских операций в выборке: {len(operations)}\n")
 
     for op in operations:
         # Дата и описание
@@ -204,8 +204,8 @@ def main() -> None:
     # === Фильтрация по статусу ===
     allowed_statuses = {"EXECUTED", "CANCELED", "PENDING"}
     while True:
-        print(f"\nВведите статус, по которому необходимо выполнить фильтрацию.")
-        print(f"Доступные для фильтровки статусы: {', '.join(allowed_statuses)}")
+        print(" Введите статус, по которому необходимо выполнить фильтрацию.")
+        print(f" Доступные для фильтровки статусы: {', '.join(allowed_statuses)}")
         status = input("Введите статус: ").strip()
         result = filter_by_status(data, status)
         if result is None:
