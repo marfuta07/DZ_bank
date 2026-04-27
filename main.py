@@ -7,4 +7,3 @@ masked_account = get_mask_account(account_number)
 
 print(f"Замаскированный  номер карты: {masked_card}")
 print(f"Замаскированный  номер банковского счета: {masked_account}")
-
