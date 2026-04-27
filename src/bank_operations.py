@@ -2,7 +2,7 @@ from collections import Counter
 from typing import List, Dict, Any
 
 
-def process_bank_operations (data: List[Dict[str, Any]], categories: List[str]) -> Dict[str, int]:
+def process_bank_operations(data: List[Dict[str, Any]], categories: List[str]) -> Dict[str, int]:
     """
     Подсчитывает количество банковских операций в каждой из заданных категорий.
     Категории определяются по вхождению строки из `categories`
@@ -32,6 +32,7 @@ def process_bank_operations (data: List[Dict[str, Any]], categories: List[str]) 
     counts = Counter(matched_categories)
     # Возвращаем обычный словарь, включая категории с нулём, если нужно их явно указать
     return {cat: counts.get(cat.lower(), 0) for cat in categories}
+
 
 bank_data = [
     {"id": 1, "description": "Оплата в кафе 'Уголок'", "amount": 450.0},
