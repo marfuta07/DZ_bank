@@ -3,7 +3,7 @@ import os
 import json
 import csv
 from src.masks import get_mask_card_number, get_mask_account
-import os
+
 
 # Определяем тип операции
 Operation = Dict[str, Any]
@@ -41,13 +41,6 @@ def load_data_from_xlsx(file_path: str) -> List[Operation]:
     """
     Загружает данные из XLSX-файла и возвращает список словарей.
     Ключи в словарях — строки (названия столбцов).
-
-    Args:
-        file_path: Путь к XLSX-файлу.
-
-    Returns:
-        Список операций в формате списка словарей с строковыми ключами.
-        При ошибке — пустой список.
     """
     try:
         import pandas as pd
